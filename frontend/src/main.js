@@ -1,6 +1,14 @@
+// frontend/src/main.js
 import { createApp } from 'vue'
-import './style.css' // Import Tailwind CSS output
 import App from './App.vue'
-import router from './router' // Import the router
+import router from './router'
+import tilt from './directives/tilt'
+// Import global CSS (e.g., Tailwind base styles). 
+// Ensure style.css or Tailwind directives are set up correctly.
+import './style.css'
 
-createApp(App).use(router).mount('#app')
+// Create and mount the app
+const app = createApp(App)
+app.directive('tilt', tilt)
+app.use(router)
+app.mount('#app')

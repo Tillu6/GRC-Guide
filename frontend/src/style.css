@@ -2,43 +2,118 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom styles for a more futuristic feel */
+/* Ensure html/body fill full height */
+html, body, #app {
+  height: 100%;
+}
+
+/* Body background gradient */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  @apply bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100;
-  min-height: 100vh;
+  @apply bg-gradient-to-br from-bg-dark to-card-dark text-text-light;
 }
 
-#app {
-  @apply flex flex-col min-h-screen;
-}
-
+/* Card styling */
 .card {
   @apply bg-card-dark p-6 rounded-lg shadow-lg-dark border border-gray-700;
 }
 
+/* Button primary */
 .btn-primary {
-  @apply bg-primary-blue text-white px-4 py-2 rounded-md hover:bg-dark-blue transition-colors duration-200;
+  @apply bg-primary-blue text-white px-4 py-2 rounded-md hover:bg-dark-blue focus:outline-none focus:ring-2 focus:ring-primary-blue transition-colors duration-200;
 }
 
+/* Input fields */
 .input-field {
-  @apply bg-gray-700 border border-gray-600 text-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-blue;
+  @apply bg-gray-700 border border-gray-600 text-text-light rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-blue w-full;
 }
 
+/* Table header/row */
 .table-header {
-  @apply bg-gray-700 text-gray-200 uppercase text-sm leading-normal;
+  @apply bg-gray-700 text-text-light uppercase text-sm leading-normal;
 }
-
 .table-row {
   @apply border-b border-gray-700 hover:bg-gray-700;
 }
 
-.status-implemented { @apply text-compliant-green font-semibold; }
-.status-not-implemented { @apply text-noncompliant-red font-semibold; }
-.status-partially-implemented { @apply text-partial-orange font-semibold; }
-.status-not-assessed { @apply text-muted-gray font-semibold; }
+/* Status badges: adjust to match your theme */
+.status-implemented { @apply bg-compliant-green text-white px-2 py-1 rounded-full text-sm; }
+.status-not-implemented { @apply bg-noncompliant-red text-white px-2 py-1 rounded-full text-sm; }
+.status-partially-implemented { @apply bg-partial-orange text-dark px-2 py-1 rounded-full text-sm; }
+.status-not-assessed { @apply bg-muted-gray text-white px-2 py-1 rounded-full text-sm; }
 
-/* Global transition for subtle changes */
+/* Transitions */
 * {
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* Router-view fade-slide defined earlier */
+.fade-slide-enter-active, .fade-slide-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.fade-slide-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-slide-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* KPI fade-in-up on mount: you can add v-if + v-on:enter to trigger fade-in-up animation */
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+/* Bounce slow */
+@keyframes bounce-slow {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.animate-bounce-slow {
+  animation: bounce-slow 2s infinite;
+}
+
+/* Heatmap tilt container */
+.heatmap-container {
+  perspective: 600px;
+}
+.heatmap-container:hover canvas {
+  transform: rotateX(10deg) scale(1.02);
+}
+canvas {
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+/* Mobile menu transitions (slide-fade) */
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-enter-from {
+  max-height: 0;
+  opacity: 0;
+}
+.slide-fade-enter-to {
+  max-height: 500px;
+  opacity: 1;
+}
+.slide-fade-leave-from {
+  max-height: 500px;
+  opacity: 1;
+}
+.slide-fade-leave-to {
+  max-height: 0;
+  opacity: 0;
 }
