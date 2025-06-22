@@ -1,0 +1,26 @@
+# Dockerfile.backend
+FROM python:3.10-slim-buster
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements first for caching
+COPY backend/requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy backend source code into /app/backend
+COPY backend/. ./backend
+
+# If main.py is at backend/main.py, we can either:
+# - set PYTHONPATH so FastAPI can import main:app
+# - copy or symlink main.py to /app/main.py
+# For simplicity, we can set working dir so Uvicorn is run from /app/backend
+WORKDIR /app/backend
+
+# Expose port (match your Uvicorn config)
+EXPOSE 8000
+
+# Default command; adjust module path if main.py is named differently
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

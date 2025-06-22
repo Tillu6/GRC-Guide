@@ -1,0 +1,16 @@
+# Python/cache
+__pycache__/
+*.pyc
+
+# Node
+frontend/node_modules
+frontend/dist
+
+# Docker
+Dockerfile*
+docker-compose.yml
+.dockerignore
+
+# IDE/editor
+.vscode/
+*.log

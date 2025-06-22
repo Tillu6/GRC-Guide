@@ -1,0 +1,9 @@
+fastapi[all]
+uvicorn[standard]
+pydantic
+jinja2
+matplotlib
+pandas
+pydantic[email]
+numpy
+python-multipart

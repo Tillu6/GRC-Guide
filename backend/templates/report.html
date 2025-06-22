@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRC Nexus Report</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 20px; background-color: #f4f7f6; }
+        .container { max-width: 960px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h1, h2, h3 { color: #0056b3; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-top: 30px; }
+        h1 { font-size: 2.2em; text-align: center; color: #004085; }
+        h2 { font-size: 1.8em; }
+        h3 { font-size: 1.4em; color: #007bff; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        .status-implemented { color: #28a745; font-weight: bold; } /* Green */
+        .status-not-implemented { color: #dc3545; font-weight: bold; } /* Red */
+        .status-partially-implemented { color: #ffc107; font-weight: bold; } /* Orange */
+        .status-not-assessed { color: #6c757d; font-weight: bold; } /* Gray */
+        .summary-box { background-color: #e9f7ef; border: 1px solid #d4edda; border-left: 5px solid #28a745; padding: 15px; border-radius: 5px; margin-bottom: 20px; display: flex; justify-content: space-around; flex-wrap: wrap; }
+        .summary-item { text-align: center; margin: 10px; }
+        .summary-item h3 { margin-bottom: 5px; border-bottom: none; color: #0056b3; }
+        .summary-item p { font-size: 1.5em; font-weight: bold; color: #333; }
+        .risk-level-low { background-color: #d4edda; color: #155724; padding: 5px 10px; border-radius: 3px; font-weight: bold; }
+        .risk-level-medium { background-color: #fff3cd; color: #856404; padding: 5px 10px; border-radius: 3px; font-weight: bold; }
+        .risk-level-high { background-color: #f8d7da; color: #721c24; padding: 5px 10px; border-radius: 3px; font-weight: bold; }
+        .recommendations-list { list-style: none; padding: 0; }
+        .recommendations-list li { background: #fefefe; border: 1px solid #eee; margin-bottom: 10px; padding: 15px; border-radius: 5px; }
+        .recommendations-list strong { color: #0056b3; }
+        .chart-img { max-width: 100%; height: auto; display: block; margin: 20px auto; border: 1px solid #e0e0e0; border-radius: 8px; }
+        @media print {
+            body { margin: 0; padding: 0; }
+            .container { box-shadow: none; border-radius: 0; padding: 15px; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GRC Nexus - Assessment Report</h1>
+        <p style="text-align: center; font-style: italic; color: #666;">Generated on: {{ request.state.timestamp if request.state.timestamp else 'N/A' }}</p>
+
+        <hr>
+
+        <h2>Compliance Assessment Summary</h2>
+        <div class="summary-box">
+            <div class="summary-item">
+                <h3>Total Controls</h3>
+                <p>{{ compliance_results.total_controls }}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Compliant</h3>
+                <p style="color: #28a745;">{{ compliance_results.compliant_count }}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Non-Compliant</h3>
+                <p style="color: #dc3545;">{{ compliance_results.non_compliant_count }}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Partially Compliant</h3>
+                <p style="color: #ffc107;">{{ compliance_results.partially_compliant_count }}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Compliance Percentage</h3>
+                <p>{{ compliance_results.compliance_percentage }}%</p>
+            </div>
+        </div>
+
+        <h3>Detailed Compliance Results</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Control ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in compliance_results.results %}
+                <tr>
+                    <td>{{ result.id }}</td>
+                    <td>{{ result.name }}</td>
+                    <td class="status-{{ result.status | lower | replace(' ', '-') }}">{{ result.status }}</td>
+                    <td>{{ result.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <hr>
+
+        <h2>Risk Assessment Summary</h2>
+        {% if risk_assessment_results.risk_heatmap %}
+            <h3>Risk Matrix Heatmap</h3>
+            <img src="data:image/png;base64,{{ risk_assessment_results.risk_heatmap }}" alt="Risk Matrix Heatmap" class="chart-img">
+        {% else %}
+            <p>No assets or risk data available to generate a heatmap.</p>
+        {% endif %}
+
+        <h3>Detailed Risk Assessment</h3>
+        {% if risk_assessment_results.risk_data %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Asset Name</th>
+                    <th>Impact (1-5)</th>
+                    <th>Likelihood (1-5)</th>
+                    <th>Risk Score</th>
+                    <th>Risk Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for asset_risk in risk_assessment_results.risk_data %}
+                <tr>
+                    <td>{{ asset_risk.name }}</td>
+                    <td>{{ asset_risk.impact }}</td>
+                    <td>{{ asset_risk.likelihood }}</td>
+                    <td>{{ asset_risk.score }}</td>
+                    <td><span class="risk-level-{{ asset_risk.level | lower }}">{{ asset_risk.level }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>No assets have been added for risk assessment.</p>
+        {% endif %}
+
+        <hr>
+
+        <h2>Recommendations</h2>
+        {% if all_recommendations %}
+        <ul class="recommendations-list">
+            {% for rec in all_recommendations %}
+            <li>
+                <strong>Type:</strong> {{ rec.type }}<br>
+                <strong>Area:</strong> {{ rec.area }}<br>
+                <strong>Item:</strong> {{ rec.item }}<br>
+                <strong>Suggestion:</strong> {{ rec.suggestion }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No recommendations generated at this time. All controls may be compliant, and no high-risk assets identified.</p>
+        {% endif %}
+
+        <p style="text-align: center; margin-top: 40px; font-size: 0.9em; color: #777;">
+            This report was generated by the GRC Nexus. For further details, please refer to the live application.
+        </p>
+    </div>
+</body>
+</html>

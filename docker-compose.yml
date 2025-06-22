@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend   # for live reload: host backend code into container
+    environment:
+      PYTHONUNBUFFERED: 1
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app  # host frontend code for live reload
+      - /app/node_modules  # prevent overwriting node_modules in container
+    environment:
+      VITE_API_URL: http://backend:8000/api
+    command: npm run dev -- --host 0.0.0.0 --port 5173
+    depends_on:
+      - backend

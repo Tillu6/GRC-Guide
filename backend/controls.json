@@ -1,0 +1,47 @@
+[
+  {
+    "id": "C001",
+    "name": "Data Encryption at Rest",
+    "description": "All sensitive data stored in databases, file systems, or cloud storage must be encrypted at rest.",
+    "category": "Technical",
+    "check_criteria": "Is all sensitive data encrypted at rest using AES-256 or higher, with proper key management?",
+    "remediation_suggestion": "Implement database encryption (e.g., TDE for SQL Server, AWS RDS encryption). Ensure S3 bucket encryption is enabled. Review and enforce file system encryption policies (e.g., BitLocker, LUKS). Establish a robust key management system (KMS).",
+    "ai_keywords": ["encryption", "data security", "data at rest", "key management"]
+  },
+  {
+    "id": "C002",
+    "name": "Multi-Factor Authentication (MFA)",
+    "description": "Multi-factor authentication must be enabled for all administrative and remote access accounts.",
+    "category": "Technical",
+    "check_criteria": "Is MFA enabled for all administrative and remote access accounts, including cloud console access?",
+    "remediation_suggestion": "Enforce MFA for all privileged accounts. Integrate MFA with SSO solutions. Educate users on the importance of MFA. Consider hardware-based MFA for critical accounts.",
+    "ai_keywords": ["MFA", "authentication", "access control", "privilege escalation"]
+  },
+  {
+    "id": "C003",
+    "name": "Regular Patch Management",
+    "description": "All operating systems, applications, and network devices must be regularly patched to address known vulnerabilities.",
+    "category": "Technical",
+    "check_criteria": "Are critical security patches applied within 7 days of release, and non-critical within 30 days?",
+    "remediation_suggestion": "Implement an automated patch management system. Establish clear patch testing and deployment windows. Regularly review patch status reports. Subscribe to vendor security advisories.",
+    "ai_keywords": ["patching", "vulnerability management", "software updates", "security updates"]
+  },
+  {
+    "id": "C004",
+    "name": "Security Logging & Monitoring",
+    "description": "Comprehensive security logs must be collected, stored, and regularly reviewed for suspicious activities.",
+    "category": "Technical",
+    "check_criteria": "Are security logs from all critical systems (servers, network devices, applications) collected centrally and monitored for anomalies?",
+    "remediation_suggestion": "Deploy a SIEM solution for centralized log collection and analysis. Define correlation rules for suspicious events. Establish alert thresholds and incident response procedures for identified anomalies. Ensure log retention policies meet compliance requirements.",
+    "ai_keywords": ["logging", "monitoring", "SIEM", "incident detection"]
+  },
+  {
+    "id": "C005",
+    "name": "Access Review Process",
+    "description": "User access rights must be regularly reviewed to ensure they align with the principle of least privilege.",
+    "category": "Administrative",
+    "check_criteria": "Are access rights reviewed quarterly for all users, especially privileged accounts and leavers?",
+    "remediation_suggestion": "Implement an automated access review system if possible. Schedule recurring access review campaigns. Document review findings and remediation actions. Revoke unnecessary permissions promptly.",
+    "ai_keywords": ["access control", "least privilege", "user management", "identity and access management"]
+  }
+]
